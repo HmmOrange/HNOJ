@@ -4720,7 +4720,7 @@ msgid ""
 "Looks like you're trying to post a source code!\n"
 "\n"
 "The comment section are not for posting source code.\n"
-"If you want to submit your solution, please use the \"Submit solution\" "
+"If you want to submit your solution, please use the \"Submit\" "
 "button.\n"
 "\n"
 "Are you sure you want to post this?"
@@ -6109,7 +6109,7 @@ msgstr "Xem dạng PDF"
 
 #: templates/problem/problem.html:129 templates/problem/problem.html:139
 #: templates/problem/problem.html:144
-msgid "Submit solution"
+msgid "Submit"
 msgstr "Gửi bài giải"
 
 #: templates/problem/problem.html:132

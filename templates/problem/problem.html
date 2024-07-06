@@ -31,6 +31,15 @@
             padding-left: 3em;
         }
 
+        .problem-info-entry {
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            background-color: #00a0dd;
+            color:white;
+            border-radius: 10px;
+        }
+
         #content-right {
             max-width: 12.5em;
             min-width: 12.5em;
@@ -38,10 +47,6 @@
 
         #problem-types, #allowed-langs, #available-judges {
             padding-top: 1em;
-        }
-
-        .problem-info-entry {
-            padding-top: 0.5em;
         }
 
         #raw_problem {
@@ -126,7 +131,7 @@
     {% if request.user.is_authenticated and request.in_contest and submission_limit %}
         {% if submissions_left > 0 %}
             <a href="{{ url('problem_submit', problem.code) }}" class="unselectable button full">
-                {{ _('Submit solution') }}
+                <i class="fa fa-paper-plane fa-fw" style="color: white;"></i> {{ _('Submit') }}
             </a>
             <div class="submissions-left">
                 {% trans trimmed counter=submissions_left %}
@@ -136,12 +141,14 @@
                 {% endtrans %}
             </div>
         {% else %}
-            <a class="unselectable button full disabled">{{ _('Submit solution') }}</a>
+            <a class="unselectable button full disabled">
+                <i class="fa fa-paper-plane fa-fw" style="color: white;"></i> {{ _('Submit') }}
+            </a>
             <div class="no-submissions-left submissions-left">{{ _('0 submissions left') }}</div>
         {% endif %}
     {% else %}
         <a href="{{ url('problem_submit', problem.code) }}" class="unselectable button full">
-            {{ _('Submit solution') }}
+            <i class="fa fa-paper-plane fa-fw" style="color: white;"></i> {{ _('Submit') }}
         </a>
     {% endif %}
 
@@ -199,62 +206,6 @@
     {% endif %}
 
     <hr style="padding-top: 0.3em">
-
-    <div class="problem-info-entry">
-        <i class="fa fa-check fa-fw"></i><span class="pi-name">{{ _('Points:') }}</span>
-        <span class="pi-value">
-            {% if contest_problem %}
-                {{ contest_problem.points }}{% if contest_problem.partial %} {{ _('(partial)') }}{% endif %}
-            {% else %}
-                {{ problem.points|floatformat(2) }}{% if problem.partial %} {{ _('(partial)') }}{% endif %}
-            {% endif %}
-        </span>
-    </div>
-    <div class="problem-info-entry">
-        <i class="fa fa-clock-o fa-fw"></i><span class="pi-name">{{ _('Time limit:') }}</span>
-        <span class="pi-value">{{ problem.time_limit }}s</span>
-    </div>
-    <div class="problem-lang-limits">
-        {% for name, limit in problem.language_time_limit %}
-            <div class="lang-limit">
-                <span class="lang-name">{{ name }}</span>
-                <span class="lang-tl">{{ limit }}s</span>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="problem-info-entry">
-        <i class="fa fa-server fa-fw"></i><span class="pi-name">{{ _('Memory limit:') }}</span>
-        <span class="pi-value">{{ problem.memory_limit|kbsimpleformat }}</span>
-    </div>
-    <div class="problem-lang-limits">
-        {% for name, limit in problem.language_memory_limit %}
-            <div class="lang-limit">
-                <span class="lang-name">{{ name }}</span>
-                <span class="lang-ml">{{ limit|kbsimpleformat }}</span>
-            </div>
-        {% endfor %}
-    </div>
-    {% if problem.io_method.method == 'standard' %}
-        <div class="problem-info-entry">
-            <i class="fa fa-keyboard-o fa-fw"></i><span class="pi-name">{{ _('Input:') }}</span>
-            <span class="pi-value">stdin</span>
-        </div>
-        <div class="problem-info-entry">
-            <i class="fa fa-print fa-fw"></i><span class="pi-name">{{ _('Output:') }}</span>
-            <span class="pi-value">stdout</span>
-        </div>
-    {% elif problem.io_method.method == 'file' %}
-        <div class="problem-info-entry">
-            <i class="fa fa-keyboard-o fa-fw"></i><span class="pi-name">{{ _('Input:') }}</span>
-            <span class="pi-value"><i>{{ problem.io_method.input }}</i></span>
-        </div>
-        <div class="problem-info-entry">
-            <i class="fa fa-print fa-fw"></i><span class="pi-name">{{ _('Output:') }}</span>
-            <span class="pi-value"><i>{{ problem.io_method.output }}</i></span>
-        </div>
-    {% endif %}
-
-    <hr style="padding-top: 0.7em">
 
     {% if not contest_problem or not contest_problem.contest.hide_problem_authors %}
         {% cache 86400 'problem_authors' problem.id LANGUAGE_CODE %}
@@ -350,6 +301,64 @@
 {% endblock %}
 
 {% block description %}
+    <div class="problem-info-entry">
+        <div>
+            <i class="fa fa-check fa-fw"></i><span class="pi-name">{{ _('Points:') }}</span>
+            <span class="pi-value">
+                {% if contest_problem %}
+                    {{ contest_problem.points }}{% if contest_problem.partial %} {{ _('(partial)') }}{% endif %}
+                {% else %}
+                    {{ problem.points|floatformat(2) }}{% if problem.partial %} {{ _('(partial)') }}{% endif %}
+                {% endif %}
+            </span>
+        </div>
+
+        <div>
+            <i class="fa fa-clock-o fa-fw"></i><span class="pi-name">{{ _('Time limit:') }}</span>
+            <span class="pi-value">{{ problem.time_limit }}s</span>
+        
+            {% for name, limit in problem.language_time_limit %}
+                <div class="lang-limit">
+                    <span class="lang-name">{{ name }}</span>
+                    <span class="lang-tl">{{ limit }}s</span>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div>
+            <i class="fa fa-server fa-fw"></i><span class="pi-name">{{ _('Memory limit:') }}</span>
+            <span class="pi-value">{{ problem.memory_limit|kbsimpleformat }}</span>
+        
+            {% for name, limit in problem.language_memory_limit %}
+                <div class="lang-limit">
+                    <span class="lang-name">{{ name }}</span>
+                    <span class="lang-ml">{{ limit|kbsimpleformat }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if problem.io_method.method == 'standard' %}
+            <div>
+                <i class="fa fa-keyboard-o fa-fw"></i><span class="pi-name">{{ _('Input:') }}</span>
+                <span class="pi-value">stdin</span>
+            </div>
+            <div>
+                <i class="fa fa-print fa-fw"></i><span class="pi-name">{{ _('Output:') }}</span>
+                <span class="pi-value">stdout</span>
+            </div>
+        {% elif problem.io_method.method == 'file' %}
+            <div>
+                <i class="fa fa-keyboard-o fa-fw"></i><span class="pi-name">{{ _('Input:') }}</span>
+                <span class="pi-value"><i>{{ problem.io_method.input }}</i></span>
+            </div>
+            <div>
+                <i class="fa fa-print fa-fw"></i><span class="pi-name">{{ _('Output:') }}</span>
+                <span class="pi-value"><i>{{ problem.io_method.output }}</i></span>
+            </div>
+        {% endif %}
+    </div>
+
+
     <iframe name="raw_problem" id="raw_problem"></iframe>
     {% if problem.is_suggesting %}
         <div class="alert alert-warning alert-dismissable">

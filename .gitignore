@@ -8,6 +8,7 @@
 *~
 *.swp
 dmoj/local_settings.py
+dmojsite/
 dmoj-site.pid
 dmoj-site.sock
 uwsgi.ini
@@ -41,3 +42,4 @@ tmp.sh
 *.sql
 fc_*
 local_urls.py
+.github/workflows/compilemessages.yml
