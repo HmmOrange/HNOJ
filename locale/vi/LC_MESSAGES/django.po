@@ -4862,10 +4862,6 @@ msgstr "Nhập mã mới cho kỳ thi nhân bản:"
 msgid "Clone!"
 msgstr "Nhân bản!"
 
-#: templates/contest/contest-all-problems.html:32
-msgid "Submit"
-msgstr "Nộp bài"
-
 #: templates/contest/contest-list-tabs.html:7
 msgid "Prev"
 msgstr "Trước"
@@ -6109,8 +6105,13 @@ msgstr "Xem dạng PDF"
 
 #: templates/problem/problem.html:129 templates/problem/problem.html:139
 #: templates/problem/problem.html:144
+#: templates/contest/contest-all-problems.html:32
 msgid "Submit"
-msgstr "Gửi bài giải"
+msgstr "Nộp bài"
+
+#: templates/problem/problem.html:413
+msgid "Show comments"
+msgstr "Hiện bình luận"
 
 #: templates/problem/problem.html:132
 #, python-format

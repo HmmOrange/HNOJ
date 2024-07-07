@@ -1,6 +1,7 @@
 {% if not request.official_contest_mode or request.user.is_superuser %}
     <div id="comments" class="comment-area">
         <h2><i style="padding-right: 0.3em" class="fa fa-comments"></i>{{ _('Comments') }}</h2>
+        <hr>
         {% if not comment_lock %}
             <div class="alert alert-warning">
                 {{ (_('Please read the [guidelines][0] before commenting.') + '\n\n  [0]: /about/comment/')|markdown('blog', strip_paragraphs=True) }}

@@ -35,7 +35,7 @@
             padding: 10px;
             display: flex;
             justify-content: space-between;
-            background-color: #00a0dd;
+            background-color: #0077aa;
             color:white;
             border-radius: 10px;
         }
@@ -371,13 +371,21 @@
     {% include "problem/problem-detail.html" %}
 {% endblock %}
 
+{% block show_comments %}
+    {% if not request.official_contest_mode or request.user.is_superuser %}
+        <a href="{{ url('new_problem_ticket', problem.code) }}" class="button">
+            <i class="fa fa-comments fa-fw"></i> {{ _('Comments') }}
+        </a>
+    {% endif %}
+{% endblock %}
+
 {% block post_description_end %}
     {% if request.user.is_authenticated and not request.profile.mute %}
         <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
             {%- if comment_lock and request.profile.current_contest.live -%}
                 {{ _('Request clarification') }}
             {%- else -%}
-                {{ _('Report an issue') }}
+                <i class="fa fa-exclamation-circle fa-fw"></i> {{ _('Report an issue') }}
             {%- endif -%}
         </a>
     {% endif %}
@@ -385,7 +393,7 @@
 
 {% block comments %}
     {% if comment_lock %}
-        <div class="clarifications-area">
+        <div class="clarifications-area" style="display: none;">
             <h2><i class="fa fa-question-circle"></i> {{ _('Clarifications') }}</h2>
             {% if has_clarifications %}
                 {% for clarification in clarifications %}
@@ -401,7 +409,31 @@
             {% endif %}
         </div>
     {% else %}
-        {% include "comments/list.html" %}
+        <button id="comments-button-toggle" onclick="toggleCommentsButton()" style="float:right; margin-right: 10px;">
+            <i class="fa fa-comments fa-fw"></i> <span id="comments-button-text">{{ _('Show comments') }}</span>
+        </button>
+
+        <div id="comments-area" style="display: none;">
+            {% include "comments/list.html" %}
+        </div>
+
+        <script>
+            function toggleCommentsButton() {
+                var content = document.getElementById("comments-area");
+                var button = document.getElementById("comments-button-text");
+
+                if (content.style.display === "none") {
+                    content.style.display = "block";
+                    // How to do translations in js script >.>
+                    // button.textContent = "Hide comments";
+                    button.textContent = "";
+                } else {
+                    content.style.display = "none";
+                    // button.textContent = "Show comments";
+                    button.textContent = "";
+                }
+            }
+        </script>
     {% endif %}
 {% endblock %}
 
